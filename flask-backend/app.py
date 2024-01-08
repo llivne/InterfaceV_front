@@ -32,16 +32,16 @@ def devices():
     rows = [
     {
       "id": 1,
-      "topicName": "A",
+      "deviceName": "A",
       "batchingTime": 5,
       "batchingNumber": 35,
       
     },
-    { "id": 2, "topicName": "B", "batchingTime": 125, "batchingNumber": 142 },
-    { "id": 3, "topicName": "C", "batchingTime": 25, "batchingNumber": 45 },
-    { "id": 4, "topicName": "D", "batchingTime": 35, "batchingNumber": 16 },
-    { "id": 5, "topicName": "E", "batchingTime": 45, "batchingNumber": None },
-    { "id": 6, "topicName": "F", "batchingTime": None, "batchingNumber": 50 },
-    { "id": 7, "topicName": "G", "batchingTime": 55, "batchingNumber": 44 },
+    { "id": 2, "deviceName": "B", "batchingTime": 125, "batchingNumber": 142 },
+    { "id": 3, "deviceName": "C", "batchingTime": 25, "batchingNumber": 45 },
+    { "id": 4, "deviceName": "D", "batchingTime": 35, "batchingNumber": 16 },
+    { "id": 5, "deviceName": "E", "batchingTime": 45, "batchingNumber": None },
+    { "id": 6, "deviceName": "F", "batchingTime": None, "batchingNumber": 50 },
+    { "id": 7, "deviceName": "G", "batchingTime": 55, "batchingNumber": 44 },
   ]
     return rows
