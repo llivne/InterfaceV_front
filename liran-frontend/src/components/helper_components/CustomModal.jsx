@@ -3,7 +3,7 @@ import { Box, Modal, Typography } from "@mui/material";
 
 import CreateForm from "../forms/CreateForm";
 
-export default function CustomModal({ open, theme }) {
+export default function CustomModal({ open, theme, columns, formHeader }) {
   const handleClose = () => {
     open.setIsOpen(false);
   };
@@ -18,7 +18,6 @@ export default function CustomModal({ open, theme }) {
     >
       <Box
         sx={{
-          // border: "2px solid #000",
           borderRadius: "5px",
           backgroundColor: "#fff",
           position: "absolute",
@@ -33,14 +32,7 @@ export default function CustomModal({ open, theme }) {
           alignItems: "center",
         }}
       >
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Text in a modal!!!!!!!!
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-
-        <CreateForm theme={theme} />
+        <CreateForm theme={theme} columns={columns} handleClose={handleClose} formHeader={formHeader} />
       </Box>
     </Modal>
   );

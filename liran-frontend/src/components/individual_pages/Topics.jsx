@@ -87,7 +87,13 @@ export default function Topics({ setHeader }) {
           {params.colDef.headerName}
         </strong>
       ),
-      renderCell: (params) => <ActionButtons theme={theme} />,
+      renderCell: (params) => (
+        <ActionButtons
+          theme={theme}
+          columns={columns}
+          formHeader={`Edit Topic`}
+        />
+      ),
     },
   ];
 

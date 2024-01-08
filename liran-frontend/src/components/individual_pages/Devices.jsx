@@ -18,7 +18,7 @@ const theme = createTheme({
 });
 
 export default function Devices({ setHeader }) {
-  const header = <TopicIcon sx={{ verticalAlign: "0px" }}> Topics</TopicIcon>;
+  const header = <TopicIcon sx={{ verticalAlign: "0px" }}> Devices</TopicIcon>;
   setHeader("Devices");
 
   const columns = [
@@ -35,8 +35,8 @@ export default function Devices({ setHeader }) {
       ),
     },
     {
-      field: "topicName",
-      headerName: "Topic name",
+      field: "deviceName",
+      headerName: "Device Name",
       width: 130,
       align: "center",
       headerAlign: "center",
@@ -88,7 +88,7 @@ export default function Devices({ setHeader }) {
           {params.colDef.headerName}
         </strong>
       ),
-      renderCell: (params) => <ActionButtons theme={theme} />,
+      renderCell: (params) => <ActionButtons theme={theme} columns={columns} formHeader={`Edit Device`}/>,
     },
   ];
 

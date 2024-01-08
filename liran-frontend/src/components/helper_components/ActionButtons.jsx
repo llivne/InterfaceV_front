@@ -6,7 +6,7 @@ import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
 
 import CustomModal from "./CustomModal";
 
-export default function ActionButtons({ theme }) {
+export default function ActionButtons({ theme, columns, formHeader }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleEditClick = () => {
@@ -26,7 +26,6 @@ export default function ActionButtons({ theme }) {
           size="small"
           color="actions"
           style={{ marginLeft: 16 }}
-          //   tabIndex={params.hasFocus ? 0 : -1}
         >
           <DeleteIcon />
         </Button>
@@ -38,12 +37,16 @@ export default function ActionButtons({ theme }) {
           size="small"
           color="actions"
           style={{ marginLeft: 16 }}
-          //   tabIndex={params.hasFocus ? 0 : -1}
         >
           <ModeEditOutlineIcon />
         </Button>
       </ThemeProvider>
-      <CustomModal open={open} theme={theme}></CustomModal>
+      <CustomModal
+        open={open}
+        theme={theme}
+        columns={columns}
+        formHeader={formHeader}
+      ></CustomModal>
     </strong>
   );
 }

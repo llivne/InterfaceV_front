@@ -5,6 +5,8 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import axios from "axios";
 
+import CustomModal from "./helper_components/CustomModal";
+
 const url = "http://localhost:5000";
 const headers = {
   "Content-Type": "application/json",
@@ -13,6 +15,7 @@ const headers = {
 
 export default function MainPage({ path, columns, theme }) {
   const [rows, setRows] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const getData = async () => {
     try {
@@ -22,6 +25,7 @@ export default function MainPage({ path, columns, theme }) {
         { withCredentials: true },
         headers
       );
+      console.log(result.data);
       setRows(result.data);
     } catch (error) {}
   };
@@ -29,6 +33,18 @@ export default function MainPage({ path, columns, theme }) {
   useEffect(() => {
     getData();
   }, []);
+
+  const handleAddClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const open = {
+    isOpen: isModalOpen,
+    setIsOpen: setIsModalOpen,
+  };
+
+  const headerPlural = path.at(0).toUpperCase() + path.slice(1);
+  const headerSingle = path.at(0).toUpperCase() + path.slice(1, -1);
 
   return (
     <div
@@ -61,22 +77,31 @@ export default function MainPage({ path, columns, theme }) {
           checkboxSelection
         />
       )}
-      <div>
-        <ThemeProvider theme={theme}>
-          <Button
-            color="actions"
-            variant="contained"
-            sx={{ margin: "5px 10px" }}
-          >
-            Add New {path.at(0).toUpperCase() + path.slice(1, -1)}
-          </Button>
-        </ThemeProvider>
-        <ThemeProvider theme={theme}>
-          <Button color="actions" variant="contained" disabled>
-            Delete Selected {path.at(0).toUpperCase() + path.slice(1)}
-          </Button>
-        </ThemeProvider>
-      </div>
+      {rows && (
+        <div>
+          <ThemeProvider theme={theme}>
+            <Button
+              onClick={handleAddClick}
+              color="actions"
+              variant="contained"
+              sx={{ margin: "5px 10px" }}
+            >
+              Add New {headerSingle}
+            </Button>
+          </ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <Button color="actions" variant="contained" disabled>
+              Delete Selected {headerPlural}
+            </Button>
+          </ThemeProvider>
+        </div>
+      )}
+      <CustomModal
+        open={open}
+        theme={theme}
+        columns={columns}
+        formHeader={`Create New ${headerSingle}`}
+      ></CustomModal>
     </div>
   );
 }
