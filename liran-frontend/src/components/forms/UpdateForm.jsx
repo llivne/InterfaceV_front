@@ -1,26 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Typography, TextField, Box, Fab } from "@mui/material";
 import { FormControl } from "@mui/base/FormControl";
 import { ThemeProvider } from "@mui/material/styles";
 
-export default function CreateForm({
+export default function UpdateForm({
   theme,
   columns,
   handleClose,
   formHeader,
-  createData,
+  updateData,
+  rowEdited,
 }) {
-  const [newItem, setNewItem] = useState(null);
-
-  useEffect(() => {
-    columns.map((col) => {
-      if (col.field === "id" || col.field === "actions") {
-        return;
-      } else {
-        setNewItem((prevState) => ({ ...prevState, [col.field]: "" }));
-      }
-    });
-  }, []);
+  console.log(rowEdited.row);
+  const [updatedItem, setUpdatedItem] = useState(rowEdited.row);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -29,12 +21,11 @@ export default function CreateForm({
       return { ...prevState, [name]: value };
     };
 
-    setNewItem(updateState);
+    setUpdatedItem(updateState);
   };
   const handleSave = (event) => {
     event.preventDefault();
-    console.log("NEW ITEM", newItem);
-    createData(newItem);
+    updateData(updatedItem);
     handleClose();
   };
 
@@ -54,7 +45,7 @@ export default function CreateForm({
           gap: "30px",
         }}
       >
-        {newItem &&
+        {updatedItem &&
           columns.map((col) => {
             if (col.field === "id" || col.field === "actions") {
               return <></>;
@@ -66,7 +57,7 @@ export default function CreateForm({
                     onChange={handleChange}
                     sx={{ minWidth: "500px" }}
                     id={fieldKey}
-                    value={newItem[fieldKey]}
+                    value={updatedItem[fieldKey]}
                     name={fieldKey}
                     key={fieldKey}
                     label={col.headerName}

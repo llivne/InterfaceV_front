@@ -2,8 +2,17 @@ import React, { useState } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 
 import CreateForm from "../forms/CreateForm";
+import UpdateForm from "../forms/UpdateForm";
 
-export default function CustomModal({ open, theme, columns, formHeader }) {
+export default function CustomModal({
+  open,
+  theme,
+  columns,
+  formHeader,
+  createData,
+  updateData,
+  rowEdited,
+}) {
   const handleClose = () => {
     open.setIsOpen(false);
   };
@@ -32,7 +41,24 @@ export default function CustomModal({ open, theme, columns, formHeader }) {
           alignItems: "center",
         }}
       >
-        <CreateForm theme={theme} columns={columns} handleClose={handleClose} formHeader={formHeader} />
+        {createData ? (
+          <CreateForm
+            theme={theme}
+            columns={columns}
+            handleClose={handleClose}
+            formHeader={formHeader}
+            createData={createData}
+          />
+        ) : (
+          <UpdateForm
+            theme={theme}
+            columns={columns}
+            handleClose={handleClose}
+            formHeader={formHeader}
+            updateData={updateData}
+            rowEdited={rowEdited}
+          />
+        )}
       </Box>
     </Modal>
   );

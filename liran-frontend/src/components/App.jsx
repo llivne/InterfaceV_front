@@ -39,7 +39,7 @@ const menuItems = [
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  // authentication
+  // authentication to be implemented
   const [toolbarText, setToolbarText] = useState("");
 
   return (
@@ -74,12 +74,12 @@ function App() {
               anchor="left"
             >
               <Toolbar />
-              {/* <Divider /> */}
+
               <List>
                 {menuItems.map((submenuName, index) => (
                   <>
                     <ListItem
-                      key={submenuName}
+                      key={Math.random() * Math.random()}
                       component={Link}
                       disablePadding
                       to={`${submenuName
@@ -90,11 +90,10 @@ function App() {
                         <ListItemIcon>{getIconForAppbar(index)}</ListItemIcon>
                         <ListItemText
                           primary={submenuName}
-                          sx={{ color: "#3B3486" }}
+                          sx={{ color: "#3B3486", marginLeft: "-10px" }}
                         />
                       </ListItemButton>
                     </ListItem>
-                    {/* <Divider /> */}
                   </>
                 ))}
               </List>
@@ -102,14 +101,13 @@ function App() {
           </div>
           <div className="MainPage">
             <Routes>
-              {/* <Route path="/topics" element={<Signup />} /> */}
               <Route
                 path="/topics"
-                element={<Topics setHeader={setToolbarText} />}
+                element={<Topics setToolbarText={setToolbarText} />}
               />
               <Route
                 path="/devices"
-                element={<Devices setHeader={setToolbarText} />}
+                element={<Devices setToolbarText={setToolbarText} />}
               />
             </Routes>
             <ToastContainer />{" "}

@@ -1,24 +1,10 @@
-import React from "react";
-import { createTheme } from "@mui/material/styles";
-import TopicIcon from "@mui/icons-material/Topic";
-
+import React, { useEffect } from "react";
 import MainPage from "../MainPage";
-import ActionButtons from "../helper_components/ActionButtons";
 
-const theme = createTheme({
-  palette: {
-    actions: {
-      main: "#58B2EF",
-      light: "#3B3486",
-      dark: "#3B3486",
-      contrastText: "#ffffff",
-    },
-  },
-});
-
-export default function Topics({ setHeader }) {
-  const header = <TopicIcon sx={{ verticalAlign: "0px" }}> Topics</TopicIcon>;
-  setHeader("Topics");
+export default function Topics({ setToolbarText }) {
+  useEffect(() => {
+    setToolbarText("Topics");
+  }, []);
 
   const columns = [
     {
@@ -75,27 +61,7 @@ export default function Topics({ setHeader }) {
       //   valueGetter: (params) =>
       //     `${params.row.firstName || ""} ${params.row.lastName || ""}`,
     },
-    {
-      field: "actions",
-      headerName: "Actions",
-      sortable: false,
-      width: 190,
-      align: "center",
-      headerAlign: "center",
-      renderHeader: (params) => (
-        <strong style={{ fontWeight: "bold" }}>
-          {params.colDef.headerName}
-        </strong>
-      ),
-      renderCell: (params) => (
-        <ActionButtons
-          theme={theme}
-          columns={columns}
-          formHeader={`Edit Topic`}
-        />
-      ),
-    },
   ];
 
-  return <MainPage path="topics" columns={columns} theme={theme} />;
+  return <MainPage path="topics" columns={columns} />;
 }
