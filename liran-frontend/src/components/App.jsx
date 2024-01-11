@@ -22,6 +22,7 @@ import { getIconForAppbar } from "../helpers.js";
 import StartPage from "./StartPage";
 import Topics from "./individual_pages/Topics.jsx";
 import Devices from "./individual_pages/Devices.jsx";
+import Manufactors from "./individual_pages/Manufacturers.jsx";
 
 import "../styles/App.css";
 
@@ -108,6 +109,10 @@ function App() {
               <Route
                 path="/devices"
                 element={<Devices setToolbarText={setToolbarText} />}
+              />
+              <Route
+                path="/manufactors"
+                element={<Manufactors setToolbarText={setToolbarText} />}
               />
             </Routes>
             <ToastContainer />{" "}

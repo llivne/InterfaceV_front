@@ -10,6 +10,7 @@ export default function CreateForm({
   formHeader,
   createData,
 }) {
+  const [error, setError] = useState("");
   const [newItem, setNewItem] = useState(null);
 
   useEffect(() => {
@@ -28,6 +29,12 @@ export default function CreateForm({
     const updateState = (prevState) => {
       return { ...prevState, [name]: value };
     };
+
+    if (event.target?.type === "number" && value < 0) {
+      setError("You can't enter a negative value");
+      return;
+    }
+    setError("");
 
     setNewItem(updateState);
   };
@@ -55,28 +62,31 @@ export default function CreateForm({
         }}
       >
         {newItem &&
-          columns.map((col) => {
-            if (col.field === "id" || col.field === "actions") {
-              return <></>;
-            } else {
-              const fieldKey = col.field;
-              return (
-                <FormControl>
+          React.Children.toArray(
+            columns.map((col) => {
+              if (col.field === "id" || col.field === "actions") {
+                return <></>;
+              } else {
+                const fieldKey = col.field;
+                const fieldType = col?.type === "number" ? "number" : "text";
+                return (
                   <TextField
+                    error={!!error && fieldType === "number"}
+                    helperText={error}
                     onChange={handleChange}
                     sx={{ minWidth: "500px" }}
                     id={fieldKey}
                     value={newItem[fieldKey]}
                     name={fieldKey}
-                    key={fieldKey}
+                    type={fieldType}
                     label={col.headerName}
                     autoComplete="off"
                     required
                   />
-                </FormControl>
-              );
-            }
-          })}
+                );
+              }
+            })
+          )}
         <div
           style={{
             width: "90%",
@@ -97,7 +107,7 @@ export default function CreateForm({
           </ThemeProvider>
           <ThemeProvider theme={theme}>
             <Fab
-              onClick={() => handleClose()}
+              onClick={handleClose}
               variant="extended"
               color="actions"
               sx={{ width: "20%", borderRadius: "5px", margin: "10px" }}

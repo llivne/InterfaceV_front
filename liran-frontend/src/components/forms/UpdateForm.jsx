@@ -11,7 +11,7 @@ export default function UpdateForm({
   updateData,
   rowEdited,
 }) {
-  console.log(rowEdited.row);
+  const [error, setError] = useState("");
   const [updatedItem, setUpdatedItem] = useState(rowEdited.row);
 
   const handleChange = (event) => {
@@ -21,6 +21,11 @@ export default function UpdateForm({
       return { ...prevState, [name]: value };
     };
 
+    if (event.target?.type === "number" && value < 0) {
+      setError("You can't enter a negative value");
+      return;
+    }
+    setError("");
     setUpdatedItem(updateState);
   };
   const handleSave = (event) => {
@@ -46,28 +51,35 @@ export default function UpdateForm({
         }}
       >
         {updatedItem &&
-          columns.map((col) => {
-            if (col.field === "id" || col.field === "actions") {
-              return <></>;
-            } else {
-              const fieldKey = col.field;
-              return (
-                <FormControl>
-                  <TextField
-                    onChange={handleChange}
-                    sx={{ minWidth: "500px" }}
-                    id={fieldKey}
-                    value={updatedItem[fieldKey]}
-                    name={fieldKey}
-                    key={fieldKey}
-                    label={col.headerName}
-                    autoComplete="off"
-                    required
-                  />
-                </FormControl>
-              );
-            }
-          })}
+          React.Children.toArray(
+            columns.map((col) => {
+              console.log(col);
+              if (col.field === "id" || col.field === "actions") {
+                return <></>;
+              } else {
+                const fieldKey = col.field;
+                const fieldType = col?.type === "number" ? "number" : "text";
+                return (
+                  <FormControl>
+                    <TextField
+                      error={!!error && fieldType === "number"}
+                      helperText={error}
+                      onChange={handleChange}
+                      sx={{ minWidth: "500px" }}
+                      id={fieldKey}
+                      value={updatedItem[fieldKey]}
+                      name={fieldKey}
+                      type={fieldType}
+                      inputProps={{ min: 0 }} // Ensure the input is not less than 0
+                      label={col.headerName}
+                      autoComplete="off"
+                      required
+                    />
+                  </FormControl>
+                );
+              }
+            })
+          )}
         <div
           style={{
             width: "90%",

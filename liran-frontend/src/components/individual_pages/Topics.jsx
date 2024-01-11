@@ -48,6 +48,7 @@ export default function Topics({ setToolbarText }) {
     {
       field: "batchingNumber",
       headerName: "Batching Number",
+      type: "number",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
       width: 160,
