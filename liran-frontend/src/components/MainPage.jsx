@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -8,6 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { getData, createData, updateData, deleteData } from "../helpers";
 import CustomModal from "./helper_components/CustomModal";
 import ActionButtons from "./helper_components/ActionButtons";
+import LoadingSpinner from "./helper_components/LoadingSpinner";
 import "../styles/App.css";
 
 const url = "http://localhost:5000";
@@ -127,12 +128,7 @@ export default function MainPage({ path, columns }) {
       }}
     >
       {isLoading ? (
-        <>
-          <div className="loader"></div>
-          <Typography variant="h5" sx={{ color: "#58B2EF" }}>
-            Loading...
-          </Typography>
-        </>
+        <LoadingSpinner />
       ) : (
         <>
           <DataGrid

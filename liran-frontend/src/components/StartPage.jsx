@@ -17,7 +17,12 @@ const theme = createTheme({
   },
 });
 
-export default function StartPage() {
+export default function StartPage({ onLogin, setIsAuthenticated }) {
+  const handleClick = async (e) => {
+    e.preventDefault();
+    const isAuthenticated = await onLogin("http://localhost:5000/login");
+    setIsAuthenticated(isAuthenticated);
+  };
   return (
     <Grid container spacing={2}>
       <Grid item xs={6}>
@@ -84,7 +89,12 @@ export default function StartPage() {
             </FormControl>
 
             <ThemeProvider theme={theme}>
-              <Fab variant="extended" color="login" sx={{ width: "30%" }}>
+              <Fab
+                onClick={handleClick}
+                variant="extended"
+                color="login"
+                sx={{ width: "30%" }}
+              >
                 <LoginIcon sx={{ mr: 1 }} />L O G I N
               </Fab>
             </ThemeProvider>

@@ -14,6 +14,14 @@ const headers = {
   "Access-Control-Allow-Origin": "http://localhost:3000",
 };
 
+export async function login(url) {
+    try {
+        const result = await axios.get(url, { withCredentials: true }, headers);
+        //   console.log(result.data);
+        return result.data;
+      } catch (error) {}
+}
+
 export function getIconForAppbar(place) {
   let icon;
   switch (place) {

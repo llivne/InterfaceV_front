@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import {
   Toolbar,
-  Divider,
   List,
   ListItem,
   ListItemButton,
@@ -23,7 +22,9 @@ import StartPage from "./StartPage";
 import Topics from "./individual_pages/Topics.jsx";
 import Devices from "./individual_pages/Devices.jsx";
 import Manufactors from "./individual_pages/Manufacturers.jsx";
+import Logout from "./individual_pages/Logout.jsx";
 
+import { login } from "../helpers.js";
 import "../styles/App.css";
 
 const drawerWidth = 250;
@@ -36,17 +37,18 @@ const menuItems = [
   "Passwords",
   "System Preferences",
   "Engines",
+  "Logout",
 ];
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   // authentication to be implemented
   const [toolbarText, setToolbarText] = useState("");
 
   return (
     <div className="App">
       {!isAuthenticated ? (
-        <StartPage />
+        <StartPage onLogin={login} setIsAuthenticated={setIsAuthenticated} />
       ) : (
         <>
           <div>
@@ -113,6 +115,10 @@ function App() {
               <Route
                 path="/manufactors"
                 element={<Manufactors setToolbarText={setToolbarText} />}
+              />
+              <Route
+                path="/logout"
+                element={<Logout setIsAuthenticated={setIsAuthenticated} />}
               />
             </Routes>
             <ToastContainer />{" "}
