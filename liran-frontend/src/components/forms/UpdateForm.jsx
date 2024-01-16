@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Typography, TextField, Box, Fab } from "@mui/material";
-import { FormControl } from "@mui/base/FormControl";
 import { ThemeProvider } from "@mui/material/styles";
 
 export default function UpdateForm({
@@ -11,26 +10,112 @@ export default function UpdateForm({
   updateData,
   rowEdited,
 }) {
-  const [error, setError] = useState("");
   const [updatedItem, setUpdatedItem] = useState(rowEdited.row);
+  const [validationState, setValidationState] = useState();
+  const [isSaveBtnDisabled, setIsSaveBtnDisabled] = useState(false);
+
+  useEffect(() => {
+    const initValidation = columns.map((col) => {
+      const validationStateForField = {
+        name: col["field"],
+        isError: false,
+        errorMsg: "",
+      };
+      return validationStateForField;
+    });
+
+    setValidationState(initValidation);
+  }, []);
+
+  const markAsFailedValidation = (validationObject, errorMsg) => {
+    validationObject.isError = true;
+    validationObject.errorMsg = errorMsg;
+    setValidationState(validationState);
+    setIsSaveBtnDisabled(true);
+    return false;
+  };
+
+  const markAsPassedValidation = (validationObject) => {
+    validationObject.isError = false;
+    validationObject.errorMsg = "";
+    setValidationState(validationState);
+    setIsSaveBtnDisabled(false);
+    return true;
+  };
+
+  const validate = (event) => {
+    const validationObject = validationState.find((validationItem) => {
+      return validationItem.name === event.name;
+    });
+
+    // event.type, event.name
+
+    const isRequiredAndEmpty = event.required && event.value.length === 0;
+    const isRequiredNotEmpty = event.required && event.value.length !== 0;
+
+    const isNegativeNumber = event.type === "number" && Number(event.value) < 0;
+    const isPositiveNumber =
+      event.type === "number" && Number(event.value) >= 0;
+
+    const min = Number(event.min);
+    const max = Number(event.max);
+
+    if (isRequiredAndEmpty) {
+      return markAsFailedValidation(
+        validationObject,
+        "This field is mandatory"
+      );
+    }
+
+    if (isNegativeNumber) {
+      return markAsFailedValidation(
+        validationObject,
+        "Only positive numbers are allowed"
+      );
+    }
+
+    if (min && Number(event.value) < min) {
+      return markAsFailedValidation(
+        validationObject,
+        `The number can't be less than ${min}`
+      );
+    }
+
+    if (max && Number(event.value) > max) {
+      return markAsFailedValidation(
+        validationObject,
+        `The number can't be bigger than ${max}`
+      );
+    }
+
+    if (isPositiveNumber) {
+      return markAsPassedValidation(validationObject);
+    }
+
+    if (isRequiredNotEmpty) {
+      return markAsPassedValidation(validationObject);
+    }
+
+    return true;
+  };
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    let { name, value } = event.target;
+    console.log(event.target.value);
 
     const updateState = (prevState) => {
       return { ...prevState, [name]: value };
     };
-
-    if (event.target?.type === "number" && value < 0) {
-      setError("You can't enter a negative value");
-      return;
-    }
-    setError("");
     setUpdatedItem(updateState);
+
+    const isValidated = validate(event.target);
+    if (!isValidated) return;
   };
+
   const handleSave = (event) => {
     event.preventDefault();
     updateData(updatedItem);
+
     handleClose();
   };
 
@@ -51,31 +136,31 @@ export default function UpdateForm({
         }}
       >
         {updatedItem &&
+          validationState &&
           React.Children.toArray(
-            columns.map((col) => {
-              console.log(col);
+            columns.map((col, idx) => {
               if (col.field === "id" || col.field === "actions") {
                 return <></>;
               } else {
                 const fieldKey = col.field;
                 const fieldType = col?.type === "number" ? "number" : "text";
+       
                 return (
-                  <FormControl>
-                    <TextField
-                      error={!!error && fieldType === "number"}
-                      helperText={error}
-                      onChange={handleChange}
-                      sx={{ minWidth: "500px" }}
-                      id={fieldKey}
-                      value={updatedItem[fieldKey]}
-                      name={fieldKey}
-                      type={fieldType}
-                      inputProps={{ min: 0 }} // Ensure the input is not less than 0
-                      label={col.headerName}
-                      autoComplete="off"
-                      required
-                    />
-                  </FormControl>
+                  <TextField
+                    error={validationState[idx].isError}
+                    helperText={validationState[idx].errorMsg}
+                    onChange={handleChange}
+                    sx={{ minWidth: "500px" }}
+                    id={fieldKey}
+                    value={updatedItem[fieldKey]}
+                    name={fieldKey}
+                    type={fieldType}
+                    inputProps={col.restrictions}
+                    // custom={restrictions} // Ensure the input is not less than 0
+                    label={col.headerName}
+                    autoComplete="off"
+                    required
+                  />
                 );
               }
             })
@@ -94,6 +179,7 @@ export default function UpdateForm({
               variant="extended"
               color="actions"
               sx={{ width: "20%", borderRadius: "5px", margin: "10px" }}
+              disabled={isSaveBtnDisabled}
             >
               Save
             </Fab>

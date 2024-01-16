@@ -44,6 +44,7 @@ export default function Topics({ setToolbarText }) {
           {params.colDef.headerName}
         </strong>
       ),
+      restrictions: { min: 1, max: 100, viki: 78 },
     },
     {
       field: "batchingNumber",

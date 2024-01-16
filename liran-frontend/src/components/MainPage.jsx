@@ -25,7 +25,7 @@ const theme = createTheme({
 });
 
 export default function MainPage({ path, columns }) {
-  // for spinner id data takes time to cme from backend
+  // for spinner id data takes time to come from backend
   const [isLoading, setIsLoading] = useState(true);
 
   // for efficient CRUD management
