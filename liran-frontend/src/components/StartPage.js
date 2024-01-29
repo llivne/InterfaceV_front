@@ -17,14 +17,14 @@ const theme = createTheme({
   },
 });
 
-export default function StartPage({ onLogin, setIsAuthenticated }) {
+export default function StartPage({ login, setIsAuthenticated }) {
   const handleClick = async (e) => {
     e.preventDefault();
-    const isAuthenticated = await onLogin("http://localhost:5000/login");
+    const isAuthenticated = await login("http://localhost:5000/login");
     setIsAuthenticated(isAuthenticated);
   };
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} data-testid="start-page" id="start-page">
       <Grid item xs={6}>
         <Paper
           elevation={0}
@@ -73,6 +73,7 @@ export default function StartPage({ onLogin, setIsAuthenticated }) {
                 required
                 id="user"
                 label="User"
+                placeholder="User"
                 autoComplete="off"
               />
             </FormControl>
@@ -83,6 +84,7 @@ export default function StartPage({ onLogin, setIsAuthenticated }) {
                 required
                 id="outlined-password-input"
                 label="Password"
+                placeholder="Password"
                 type="password"
                 autoComplete="current-password"
               />

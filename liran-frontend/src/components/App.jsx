@@ -48,10 +48,10 @@ function App() {
   return (
     <div className="App">
       {!isAuthenticated ? (
-        <StartPage onLogin={login} setIsAuthenticated={setIsAuthenticated} />
+        <StartPage login={login} setIsAuthenticated={setIsAuthenticated} />
       ) : (
         <>
-          <div>
+          <div data-testid="main-page">
             <CssBaseline />
             <AppBar
               position="fixed"

@@ -126,6 +126,7 @@ export default function MainPage({ path, columns }) {
         alignItems: "center",
         gap: "15px",
       }}
+
     >
       {isLoading ? (
         <LoadingSpinner />

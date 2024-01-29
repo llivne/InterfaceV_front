@@ -1,4 +1,5 @@
 from flask import Flask, request
+import json
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -20,6 +21,8 @@ rows_topics = [
     { "id": 7, "topicName": "G", "batchingTime": 5, "batchingNumber": 44 },
   ]
 
+counter = len(rows_topics)
+
 rows_devices = [
     {
       "id": 1,
@@ -40,6 +43,10 @@ rows_devices = [
 def home():
     return "<h1>Hello, Flask!</h1>"
 
+@app.route("/login")
+def login():
+    return json.dumps(True)
+
 @app.route("/topics", methods=['GET', 'POST', 'PATCH'])
 def topics():
     if request.method == 'GET':
@@ -52,8 +59,11 @@ def topics():
             or not new_item["batchingTime"] or not new_item["batchingNumber"]:
             return "Failure"
         
+        global counter
+        counter = counter + 1
+
         item_to_add = {
-            "id": rows_topics.__len__() + 1,
+            "id": counter,
             "topicName": new_item["topicName"],
             "batchingTime": new_item["batchingTime"], 
             "batchingNumber": new_item["batchingNumber"]
@@ -68,16 +78,6 @@ def topics():
         item_in_list.update(updated_item)
         return "Success"
     
-    # if request.method == "DELETE": 
-    #     print(request.json)
-    #     item_to_delete_id = request.json["item_to_delete_id"]
-    #     print(request.json)
-    #     for i in range(len(rows_topics)):
-    #         if rows_topics[i]['id'] == item_to_delete_id:
-    #             del rows_topics[i]
-    #             return "Success"
-
-    #     return "Failure"
 
 @app.route("/topics/<int:item_to_delete_id>", methods=['DELETE'])
 def topics_del(item_to_delete_id):

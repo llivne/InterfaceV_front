@@ -17,7 +17,6 @@ const headers = {
 export async function login(url) {
     try {
         const result = await axios.get(url, { withCredentials: true }, headers);
-        //   console.log(result.data);
         return result.data;
       } catch (error) {}
 }
