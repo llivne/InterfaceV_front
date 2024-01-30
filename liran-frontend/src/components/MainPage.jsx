@@ -126,13 +126,13 @@ export default function MainPage({ path, columns }) {
         alignItems: "center",
         gap: "15px",
       }}
-
     >
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <>
           <DataGrid
+            data-testid="data-grid"
             sx={{
               width: "100%",
               display: "flex",
