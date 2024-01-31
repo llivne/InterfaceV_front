@@ -37,10 +37,9 @@ describe("StartPage component", () => {
   });
 
   it("submits the form on button click", async () => {
-
     const mockedAuth = jest.fn();
 
-    const anotherMockedLogin = jest
+    const mockedLogin = jest
       .spyOn(helpers, "login")
       .mockImplementation(async () => {
         mockedAuth(true);
@@ -48,7 +47,7 @@ describe("StartPage component", () => {
       });
 
     const component = (
-      <StartPage login={anotherMockedLogin} setIsAuthenticated={mockedAuth} />
+      <StartPage login={mockedLogin} setIsAuthenticated={mockedAuth} />
     );
 
     const { unmount } = render(component);
@@ -61,9 +60,9 @@ describe("StartPage component", () => {
     fireEvent.change(passwordInput, { target: { value: "password123" } });
 
     fireEvent.click(screen.getByRole("button", { name: "L O G I N" }));
-    expect(anotherMockedLogin).toHaveBeenCalled();
-    expect(anotherMockedLogin.mock.calls.length).toBe(1);
-    expect(anotherMockedLogin).toHaveBeenCalledWith(
+    expect(mockedLogin).toHaveBeenCalled();
+    expect(mockedLogin.mock.calls.length).toBe(1);
+    expect(mockedLogin).toHaveBeenCalledWith(
       "http://localhost:5000/login"
     );
 

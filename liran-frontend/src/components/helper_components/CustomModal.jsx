@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Modal, Typography } from "@mui/material";
+import React from "react";
+import { Box, Modal } from "@mui/material";
 
 import CreateForm from "../forms/CreateForm";
 import UpdateForm from "../forms/UpdateForm";
@@ -23,7 +23,7 @@ export default function CustomModal({
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      sx={{}}
+      role="modal-window"
     >
       <Box
         sx={{
@@ -40,6 +40,7 @@ export default function CustomModal({
           justifyContent: "center",
           alignItems: "center",
         }}
+        role="modal-window"
       >
         {createData ? (
           <CreateForm
