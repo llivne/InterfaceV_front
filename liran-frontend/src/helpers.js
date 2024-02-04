@@ -14,11 +14,11 @@ const headers = {
   "Access-Control-Allow-Origin": "http://localhost:3000",
 };
 
-export async function login(url) {
-    try {
-        const result = await axios.get(url, { withCredentials: true }, headers);
-        return result.data;
-      } catch (error) {}
+export async function loginFunc(url) {
+  try {
+    const result = await axios.get(url, { withCredentials: true }, headers);
+    return result.data;
+  } catch (error) {}
 }
 
 export function getIconForAppbar(place) {
@@ -85,9 +85,6 @@ export const updateData = async (url, updatedItem) => {
 export const deleteData = async (url) => {
   try {
     // when Flask is the backend server, axios.delete should not take headers!
-    await axios.delete(
-      url,
-      { withCredentials: true }
-    );
+    await axios.delete(url, { withCredentials: true });
   } catch (error) {}
 };

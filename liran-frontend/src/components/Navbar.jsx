@@ -59,24 +59,28 @@ export default function Navbar({ navHeader }) {
         <Toolbar />
 
         <List>
-          {menuItems.map((submenuName, index) => (
-            <>
-              <ListItem
-                key={Math.random() * Math.random()}
-                component={Link}
-                disablePadding
-                to={`${submenuName.at(0).toLowerCase()}${submenuName.slice(1)}`}
-              >
-                <ListItemButton>
-                  <ListItemIcon>{getIconForAppbar(index)}</ListItemIcon>
-                  <ListItemText
-                    primary={submenuName}
-                    sx={{ color: "#3B3486", marginLeft: "-10px" }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </>
-          ))}
+          {React.Children.toArray(
+            menuItems.map((submenuName, index) => (
+              <>
+                <ListItem
+                  key={Math.random() * Math.random()}
+                  component={Link}
+                  disablePadding
+                  to={`${submenuName.at(0).toLowerCase()}${submenuName.slice(
+                    1
+                  )}`}
+                >
+                  <ListItemButton>
+                    <ListItemIcon>{getIconForAppbar(index)}</ListItemIcon>
+                    <ListItemText
+                      primary={submenuName}
+                      sx={{ color: "#3B3486", marginLeft: "-10px" }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              </>
+            ))
+          )}
         </List>
       </Drawer>
     </div>

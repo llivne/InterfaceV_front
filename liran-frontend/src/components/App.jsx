@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+import AuthProvider, { AuthContext } from "../contexts/Auth.context.js";
 import Navbar from "./Navbar.jsx";
 import StartPage from "./StartPage";
 import Topics from "./individual_pages/Topics.jsx";
@@ -12,21 +13,27 @@ import Devices from "./individual_pages/Devices.jsx";
 import Manufactors from "./individual_pages/Manufacturers.jsx";
 import Logout from "./individual_pages/Logout.jsx";
 
-import { login } from "../helpers.js";
 import "../styles/App.css";
 
 export default memo(function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // authentication to be implemented
-  const [toolbarText, setToolbarText] = useState("");
+  return (
+    <AuthProvider>
+      <MainApp />
+    </AuthProvider>
+  );
+});
 
+function MainApp() {
+  const [toolbarText, setToolbarText] = useState("");
+  const auth = React.useContext(AuthContext);
+  console.log(auth);
   return (
     <div className="App">
-      {!isAuthenticated ? (
-        <StartPage login={login} setIsAuthenticated={setIsAuthenticated} />
+      {!auth.isAuthenticated ? (
+        <StartPage />
       ) : (
         <>
-          <Navbar navHeader={toolbarText}/>
+          <Navbar navHeader={toolbarText} />
           <div className="MainPage">
             <Routes>
               <Route
@@ -41,10 +48,7 @@ export default memo(function App() {
                 path="/manufactors"
                 element={<Manufactors setToolbarText={setToolbarText} />}
               />
-              <Route
-                path="/logout"
-                element={<Logout setIsAuthenticated={setIsAuthenticated} />}
-              />
+              <Route path="/logout" element={<Logout />} />
             </Routes>
             <ToastContainer />{" "}
           </div>
@@ -52,4 +56,4 @@ export default memo(function App() {
       )}
     </div>
   );
-});
+}

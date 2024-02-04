@@ -4,6 +4,7 @@ import { FormControl } from "@mui/base/FormControl";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LoginIcon from "@mui/icons-material/Login";
 
+import { AuthContext } from "../contexts/Auth.context";
 import img from "../InterfaceMain.png";
 
 const theme = createTheme({
@@ -17,11 +18,12 @@ const theme = createTheme({
   },
 });
 
-export default function StartPage({ login, setIsAuthenticated }) {
+export default function StartPage() {
+  const auth = React.useContext(AuthContext);
+
   const handleClick = async (e) => {
     e.preventDefault();
-    const isAuthenticated = await login("http://localhost:5000/login");
-    setIsAuthenticated(isAuthenticated);
+    auth.login();
   };
   return (
     <Grid container spacing={2} data-testid="start-page" id="start-page">
