@@ -1,6 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import StartPage from "../components/StartPage";
+import { BrowserRouter } from "react-router-dom";
+import AuthProvider from "../contexts/Auth.context";
 import * as helpers from "../helpers";
 
 describe("StartPage component", () => {
@@ -30,24 +32,23 @@ describe("StartPage component", () => {
   it("handles password input correctly", () => {
     render(<StartPage />);
     const passwordInput = screen.getByPlaceholderText("Password");
-
     fireEvent.change(passwordInput, { target: { value: "password123" } });
-
     expect(passwordInput.value).toBe("password123");
   });
 
   it("submits the form on button click", async () => {
-    const mockedAuth = jest.fn();
-
     const mockedLogin = jest
-      .spyOn(helpers, "login")
+      .spyOn(helpers, "loginFunc")
       .mockImplementation(async () => {
-        mockedAuth(true);
+        // mockedAuth(true);
         return ["true"];
       });
-
     const component = (
-      <StartPage login={mockedLogin} setIsAuthenticated={mockedAuth} />
+      <BrowserRouter>
+        <AuthProvider>
+          <StartPage />
+        </AuthProvider>
+      </BrowserRouter>
     );
 
     const { unmount } = render(component);
@@ -62,11 +63,8 @@ describe("StartPage component", () => {
     fireEvent.click(screen.getByRole("button", { name: "L O G I N" }));
     expect(mockedLogin).toHaveBeenCalled();
     expect(mockedLogin.mock.calls.length).toBe(1);
-    expect(mockedLogin).toHaveBeenCalledWith(
-      "http://localhost:5000/login"
-    );
+    expect(mockedLogin).toHaveBeenCalledWith("http://localhost:5000/login");
 
-    expect(mockedAuth).toHaveBeenCalledWith(true);
     unmount();
 
     await waitFor(async () => {
