@@ -18,6 +18,7 @@ export default function ActionButtons({
           size="small"
           color="actions"
           style={{ marginLeft: 16 }}
+          role="delete"
         >
           <DeleteIcon />
         </Button>
@@ -29,6 +30,7 @@ export default function ActionButtons({
           size="small"
           color="actions"
           style={{ marginLeft: 16 }}
+          role="update"
         >
           <ModeEditOutlineIcon />
         </Button>

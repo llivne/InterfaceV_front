@@ -1,53 +1,34 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import { Button } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
-
-function ActionButtons({ handleEditClick, handleDeleteClick }) {
-  return (
-    <strong>
-      <Button
-        onClick={handleDeleteClick}
-        variant="contained"
-        size="small"
-        style={{ marginLeft: 16 }}
-        role="delete"
-      >
-        <DeleteIcon />
-      </Button>
-
-      <Button
-        onClick={handleEditClick}
-        variant="contained"
-        size="small"
-        style={{ marginLeft: 16 }}
-        role="update"
-      >
-        <ModeEditOutlineIcon />
-      </Button>
-    </strong>
-  );
-}
+import ActionButtons from "../components/helper_components/ActionButtons";
 
 // Mock functions for testing click handlers
 const mockHandleEditClick = jest.fn();
 const mockHandleDeleteClick = jest.fn();
-
-jest.mock("@mui/material/styles", () => ({
-  ...jest.requireActual("@mui/material/styles"),
-  createTheme: jest.fn(),
-}));
+const theme = createTheme({
+  palette: {
+    actions: {
+      main: "#58B2EF",
+      light: "#3B3486",
+      dark: "#3B3486",
+      contrastText: "#ffffff",
+    },
+  },
+});
 
 describe("ActionButtons component", () => {
   it("renders ActionButtons component correctly", () => {
     const { getByRole } = render(
-      <ActionButtons
-        handleEditClick={mockHandleEditClick}
-        handleDeleteClick={mockHandleDeleteClick}
-      />
+      <ThemeProvider theme={theme}>
+        <ActionButtons
+          handleEditClick={mockHandleEditClick}
+          handleDeleteClick={mockHandleDeleteClick}
+          theme={theme}
+        />
+      </ThemeProvider>
     );
 
     // Check if the delete button is rendered
@@ -62,6 +43,7 @@ describe("ActionButtons component", () => {
       <ActionButtons
         handleEditClick={mockHandleEditClick}
         handleDeleteClick={mockHandleDeleteClick}
+        theme={theme}
       />
     );
 
@@ -77,6 +59,7 @@ describe("ActionButtons component", () => {
       <ActionButtons
         handleEditClick={mockHandleEditClick}
         handleDeleteClick={mockHandleDeleteClick}
+        theme={theme}
       />
     );
 

@@ -26,7 +26,7 @@ export default memo(function App() {
 function MainApp() {
   const [toolbarText, setToolbarText] = useState("");
   const auth = React.useContext(AuthContext);
-  console.log(auth);
+
   return (
     <div className="App">
       {!auth.isAuthenticated ? (
