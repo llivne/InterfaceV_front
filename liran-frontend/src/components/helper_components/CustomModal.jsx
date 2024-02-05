@@ -40,7 +40,6 @@ export default function CustomModal({
           justifyContent: "center",
           alignItems: "center",
         }}
-        role="modal-window"
       >
         {createData ? (
           <CreateForm
