@@ -40,7 +40,6 @@ describe("StartPage component", () => {
     const mockedLogin = jest
       .spyOn(helpers, "loginFunc")
       .mockImplementation(async () => {
-        // mockedAuth(true);
         return ["true"];
       });
     const component = (
