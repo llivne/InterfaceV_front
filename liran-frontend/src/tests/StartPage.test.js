@@ -17,17 +17,29 @@ describe("StartPage component", () => {
     ).toBeInTheDocument();
   });
 
-  //   it("displays an error message for invalid email", () => {
-  //     render(<Signup />);
-  //     const emailInput = screen.getByPlaceholderText("Email");
+  it("displays an error message for empty user field", () => {
+    render(<StartPage />);
+    const userInput = screen.getByPlaceholderText("User");
 
-  //     fireEvent.change(emailInput, { target: { value: "invalid-email" } });
-  //     fireEvent.click(screen.getByRole("button", { name: "Extended" }));
+    fireEvent.change(userInput, { target: { value: "" } });
+    fireEvent.click(screen.getByRole("button", { name: "L O G I N" }));
 
-  //     expect(
-  //       screen.getByText("Enter a valid email address.")
-  //     ).toBeInTheDocument();
-  //   });
+    expect(screen.getByRole("button", { name: "L O G I N" })).toHaveAttribute(
+      "disabled"
+    );
+  });
+
+  it("displays an error message for empty password field", () => {
+    render(<StartPage />);
+    const pswdInput = screen.getByPlaceholderText("Password");
+
+    fireEvent.change(pswdInput, { target: { value: "" } });
+    fireEvent.click(screen.getByRole("button", { name: "L O G I N" }));
+
+    expect(screen.getByRole("button", { name: "L O G I N" })).toHaveAttribute(
+      "disabled"
+    );
+  });
 
   it("handles password input correctly", () => {
     render(<StartPage />);
