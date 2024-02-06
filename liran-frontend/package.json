@@ -26,8 +26,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --watchAll --coverage --transformIgnorePatterns \"node_modules/(?!axios)/\"",
-    "eject": "react-scripts eject",
-    "jest": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll --coverage"
+    "eject": "react-scripts eject"
   },
   "jest": {
     "coverageThreshold": {
