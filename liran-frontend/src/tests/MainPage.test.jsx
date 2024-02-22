@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import AuthProvider from "../contexts/Auth.context";
 import MainPage from "../components/MainPage";
-import ActionButtons from "../components/helper_components/ActionButtons";
 
 // Mocking the helpers
 jest.mock("../helpers", () => ({
@@ -18,13 +19,10 @@ const createDataGridMock = ({
       batchingTime: 5,
       batchingNumber: 35,
     },
-    { id: 2, topicName: "B", batchingTime: 25, batchingNumber: 42 },
-    { id: 3, topicName: "C", batchingTime: 5, batchingNumber: 45 },
-    { id: 4, topicName: "D", batchingTime: 5, batchingNumber: 16 },
-    { id: 5, topicName: "E", batchingTime: 5, batchingNumber: null },
-    { id: 6, topicName: "F", batchingTime: null, batchingNumber: 150 },
-    { id: 7, topicName: "G", batchingTime: 5, batchingNumber: 44 },
+    { id: 2, topicName: "B", batchingTime: 25, batchingNumber: null },
+    { id: 3, topicName: "C", batchingTime: null, batchingNumber: 45 },
   ],
+
   columns = [
     {
       field: "id",
@@ -105,22 +103,32 @@ const createDataGridMock = ({
 
 jest.mock("@mui/x-data-grid", () => ({
   __esModule: true,
-  ...jest.requireActual("@mui/x-data-grid"), // Use the actual implementation for other exports
+  // ...jest.requireActual("@mui/x-data-grid"), // Use the actual implementation for other exports
   DataGrid: jest.fn(() => createDataGridMock),
 }));
 
 describe("MainPage component", () => {
-  // Test 1: Renders loading spinner when data is loading
   it("renders loading spinner when data is loading", () => {
-    render(<MainPage path="example" columns={[]} />);
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <MainPage path="example" columns={[]} />
+        </AuthProvider>
+      </BrowserRouter>
+    );
     expect(
       screen.getByText("Loading...", { exact: false })
     ).toBeInTheDocument();
   });
 
-  // Test 2: Renders DataGrid when data is loaded
   it("renders DataGrid when data is loaded", async () => {
-    render(<MainPage path="example" columns={[]} />);
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <MainPage path="example" columns={[]} />
+        </AuthProvider>
+      </BrowserRouter>
+    );
     // Simulate data loading
     await waitFor(() => {
       expect(
@@ -132,7 +140,6 @@ describe("MainPage component", () => {
     });
   });
 
-  // Test 3: Opens create modal on button click
   it("opens create modal on button click", async () => {
     render(<MainPage path="example" columns={[]} />);
 
@@ -146,43 +153,4 @@ describe("MainPage component", () => {
       screen.getByText("Create New ", { exact: false })
     ).toBeInTheDocument();
   });
-
-  // Test 4: Calls updateData on row update
-  // it("calls updateData on row update", async () => {
-  //   const updateDataMock = jest.fn();
-
-  //   render(
-  //     <MainPage
-  //       path="example"
-  //       columns={["id", "name", "time", "number", ActionButtons]}
-  //     />
-  //   );
-  //   // Wait for DataGrid to render
-  //   await waitFor(() =>
-  //     expect(screen.getByTestId("mocked-data-grid")).toBeInTheDocument()
-  //   );
-  //   // Trigger row update
-  //   await waitFor(() => {
-  //     fireEvent.click(screen.getByRole("update"));
-  //     // fireEvent.click(screen.getByText(/Update/i));
-  //   });
-  //   // Check if updateData is called
-  //   expect(updateDataMock).toHaveBeenCalledWith(
-  //     "http://localhost:5000/example",
-  //     expect.any(Object)
-  //   );
-  // });
-
-  // Test 5: Calls deleteData on button click
-  // it("calls deleteData on button click", async () => {
-  //   render(<MainPage path="example" columns={[]} />);
-  //   // Wait for DataGrid to render
-  //   await waitFor(() =>
-  //     expect(screen.getByTestId("data-grid")).toBeInTheDocument()
-  //   );
-  //   // Trigger delete button click
-  //   fireEvent.click(screen.getByText(/Delete Selected Example/i));
-  //   // Check if deleteData is called
-  //   expect(deleteData).toHaveBeenCalled();
-  // });
 });
