@@ -18,6 +18,7 @@ import { getIconForAppbar } from "../helpers.js";
 const drawerWidth = 250;
 // now hardcoded but probably should be extracted from backend dynamically
 const menuItems = [
+  "Home",
   "Topics",
   "Devices",
   "Manufactors",
@@ -66,9 +67,13 @@ export default function Navbar({ navHeader }) {
                   key={Math.random() * Math.random()}
                   component={Link}
                   disablePadding
-                  to={`${submenuName.at(0).toLowerCase()}${submenuName.slice(
-                    1
-                  )}`}
+                  to={
+                    submenuName === "Home"
+                      ? "/"
+                      : `${submenuName.at(0).toLowerCase()}${submenuName.slice(
+                          1
+                        )}`
+                  }
                 >
                   <ListItemButton>
                     <ListItemIcon>{getIconForAppbar(index)}</ListItemIcon>

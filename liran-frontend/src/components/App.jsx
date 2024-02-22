@@ -14,6 +14,7 @@ import Manufactors from "./individual_pages/Manufacturers.jsx";
 import Logout from "./individual_pages/Logout.jsx";
 
 import "../styles/App.css";
+import Home from "./Home.jsx";
 
 export default memo(function App() {
   return (
@@ -36,6 +37,10 @@ function MainApp() {
           <Navbar navHeader={toolbarText} />
           <div className="MainPage">
             <Routes>
+              <Route
+                path="/"
+                element={<Home setToolbarText={setToolbarText} />}
+              />
               <Route
                 path="/topics"
                 element={<Topics setToolbarText={setToolbarText} />}

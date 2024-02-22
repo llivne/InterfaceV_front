@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid, Paper, Typography, TextField, Box, Fab } from "@mui/material";
-import { FormControl } from "@mui/base/FormControl";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import LoginIcon from "@mui/icons-material/Login";
 
@@ -19,11 +18,29 @@ const theme = createTheme({
 });
 
 export default function StartPage() {
+  const [loginData, setLoginData] = React.useState({
+    user: " ",
+    password: " ",
+  });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    const updateState = (prevState) => {
+      return { ...prevState, [name]: value };
+    };
+    setLoginData(updateState);
+  };
+
   const auth = React.useContext(AuthContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
     auth.login();
+    setLoginData({
+      username: "",
+      password: "",
+    });
   };
   return (
     <Grid container spacing={2} data-testid="start-page" id="start-page">
@@ -69,28 +86,32 @@ export default function StartPage() {
               gap: "15px",
             }}
           >
-            <FormControl>
-              <TextField
-                sx={{ minWidth: "500px" }}
-                required
-                id="user"
-                label="User"
-                placeholder="User"
-                autoComplete="off"
-              />
-            </FormControl>
+            <TextField
+              sx={{ minWidth: "500px" }}
+              required
+              id="user"
+              name="user"
+              label="User"
+              placeholder="User"
+              autoComplete="off"
+              onChange={handleChange}
+              error={loginData.user === ""}
+              helperText="Requiered field"
+            />
 
-            <FormControl>
-              <TextField
-                sx={{ minWidth: "500px" }}
-                required
-                id="outlined-password-input"
-                label="Password"
-                placeholder="Password"
-                type="password"
-                autoComplete="current-password"
-              />
-            </FormControl>
+            <TextField
+              sx={{ minWidth: "500px" }}
+              required
+              id="password"
+              name="password"
+              label="Password"
+              placeholder="Password"
+              type="password"
+              autoComplete="current-password"
+              onChange={handleChange}
+              error={loginData.password === ""}
+              helperText="Requiered field"
+            />
 
             <ThemeProvider theme={theme}>
               <Fab
@@ -98,6 +119,12 @@ export default function StartPage() {
                 variant="extended"
                 color="login"
                 sx={{ width: "30%" }}
+                disabled={
+                  loginData.user === "" ||
+                  loginData.password === "" ||
+                  loginData.user === " " ||
+                  loginData.password === " "
+                }
               >
                 <LoginIcon sx={{ mr: 1 }} />L O G I N
               </Fab>

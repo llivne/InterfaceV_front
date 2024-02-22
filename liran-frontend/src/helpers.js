@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import HomeIcon from "@mui/icons-material/Home";
 import TopicIcon from "@mui/icons-material/Topic";
 import DevicesIcon from "@mui/icons-material/Devices";
 import FactoryIcon from "@mui/icons-material/Factory";
@@ -8,6 +9,7 @@ import ExtensionIcon from "@mui/icons-material/Extension";
 import PasswordIcon from "@mui/icons-material/Password";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const headers = {
   "Content-Type": "application/json",
@@ -25,28 +27,34 @@ export function getIconForAppbar(place) {
   let icon;
   switch (place) {
     case 0:
-      icon = <TopicIcon sx={{ color: "#3B3486" }} />;
+      icon = <HomeIcon sx={{ color: "#3B3486" }} />;
       break;
     case 1:
-      icon = <DevicesIcon sx={{ color: "#3B3486" }} />;
+      icon = <TopicIcon sx={{ color: "#3B3486" }} />;
       break;
     case 2:
-      icon = <FactoryIcon sx={{ color: "#3B3486" }} />;
+      icon = <DevicesIcon sx={{ color: "#3B3486" }} />;
       break;
     case 3:
-      icon = <StorageIcon sx={{ color: "#3B3486" }} />;
+      icon = <FactoryIcon sx={{ color: "#3B3486" }} />;
       break;
     case 4:
-      icon = <ExtensionIcon sx={{ color: "#3B3486" }} />;
+      icon = <StorageIcon sx={{ color: "#3B3486" }} />;
       break;
     case 5:
-      icon = <PasswordIcon sx={{ color: "#3B3486" }} />;
+      icon = <ExtensionIcon sx={{ color: "#3B3486" }} />;
       break;
     case 6:
-      icon = <SettingsSuggestIcon sx={{ color: "#3B3486" }} />;
+      icon = <PasswordIcon sx={{ color: "#3B3486" }} />;
       break;
     case 7:
+      icon = <SettingsSuggestIcon sx={{ color: "#3B3486" }} />;
+      break;
+    case 8:
       icon = <EngineeringIcon sx={{ color: "#3B3486" }} />;
+      break;
+    case 9:
+      icon = <LogoutIcon sx={{ color: "#3B3486" }} />;
       break;
   }
   return icon;
@@ -55,7 +63,6 @@ export function getIconForAppbar(place) {
 export const getData = async (url) => {
   try {
     const result = await axios.get(url, { withCredentials: true }, headers);
-    //   console.log(result.data);
     return result.data;
   } catch (error) {}
 };

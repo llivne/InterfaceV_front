@@ -18,6 +18,7 @@ export default function Topics({ setToolbarText }) {
           {params.colDef.headerName}
         </strong>
       ),
+      validation: null,
     },
     {
       field: "topicName",
@@ -31,6 +32,7 @@ export default function Topics({ setToolbarText }) {
         </strong>
       ),
       renderCell: (params) => <strong>{params.value}</strong>,
+      validation: [{ required: true }],
     },
     {
       field: "batchingTime",
@@ -44,7 +46,7 @@ export default function Topics({ setToolbarText }) {
           {params.colDef.headerName}
         </strong>
       ),
-      restrictions: { min: 1, max: 100, viki: 78 },
+      validation: [{ min: 1 }, { max: 100 }, { viki: 78 }],
     },
     {
       field: "batchingNumber",
@@ -62,6 +64,7 @@ export default function Topics({ setToolbarText }) {
       ),
       //   valueGetter: (params) =>
       //     `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+      validation: [{ min: 1 }, { max: 100 }, { viki: 78 }],
     },
   ];
 
