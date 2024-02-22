@@ -64,7 +64,9 @@ export const getData = async (url) => {
   try {
     const result = await axios.get(url, { withCredentials: true }, headers);
     return result.data;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const createData = async (url, newItem) => {
@@ -75,7 +77,9 @@ export const createData = async (url, newItem) => {
       { withCredentials: true },
       headers
     );
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const updateData = async (url, updatedItem) => {
@@ -86,12 +90,16 @@ export const updateData = async (url, updatedItem) => {
       { withCredentials: true },
       headers
     );
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const deleteData = async (url) => {
   try {
     // when Flask is the backend server, axios.delete should not take headers!
     await axios.delete(url, { withCredentials: true });
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };

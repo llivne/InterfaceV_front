@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getIconForAppbar returns the correct icon for each place 1`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 2`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 3`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 4`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 5`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 6`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 7`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 8`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 9`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;
+
+exports[`getIconForAppbar returns the correct icon for each place 10`] = `
+<Memo
+  sx={
+    Object {
+      "color": "#3B3486",
+    }
+  }
+/>
+`;

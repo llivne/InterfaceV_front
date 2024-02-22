@@ -24,7 +24,7 @@ export default function Home({ setToolbarText }) {
             alignItems: "center",
           }}
         >
-          <img src={img} width={300} />
+          <img src={img} width={300} alt="Interface B" />
           <Typography variant="h1" sx={{ color: "white" }}>
             Interface B
           </Typography>
