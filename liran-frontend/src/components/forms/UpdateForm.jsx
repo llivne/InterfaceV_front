@@ -3,6 +3,8 @@ import { Typography, TextField, Box, Fab } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { CustomThemeContext } from "../../contexts/CustomTheme.context";
 
+import { validate } from "../../helpers";
+
 export default function UpdateForm({
   columns,
   handleClose,
@@ -40,7 +42,7 @@ export default function UpdateForm({
     };
     setUpdatedItem(updateState);
 
-    validate(name, value);
+    validate(name, value, validationRules, setIsSaveBtnDisabled);
   };
 
   const handleSave = (event) => {
@@ -49,65 +51,6 @@ export default function UpdateForm({
 
     handleClose();
   };
-
-  function validate(name, value) {
-    const isRequired = validationRules[name].required;
-    const hasMin = validationRules[name].min;
-    const hasMax = validationRules[name].max !== null;
-    const hasViki = validationRules[name].viki;
-
-    if (isRequired && value === "") {
-      validationRules[name].error = true;
-      validationRules[name].errorMessage = `Required field`;
-      setIsSaveBtnDisabled(true);
-      return;
-    }
-
-    if (hasMin) {
-      if (+value < validationRules[name].min) {
-        validationRules[name].error = true;
-        validationRules[
-          name
-        ].errorMessage = `Can't be less than ${validationRules[name].min}`;
-        setIsSaveBtnDisabled(true);
-        return;
-      } else {
-        validationRules[name].error = false;
-        validationRules[name].errorMessage = ``;
-        setIsSaveBtnDisabled(false);
-      }
-    }
-
-    if (hasMax) {
-      if (+value > validationRules[name].max) {
-        validationRules[name].error = true;
-        validationRules[
-          name
-        ].errorMessage = `Can't be more than ${validationRules[name].max}`;
-        setIsSaveBtnDisabled(true);
-        return;
-      } else {
-        validationRules[name].error = false;
-        validationRules[name].errorMessage = ``;
-        setIsSaveBtnDisabled(false);
-      }
-    }
-
-    if (hasViki) {
-      if (+value % validationRules[name].viki === 0) {
-        validationRules[name].error = true;
-        validationRules[
-          name
-        ].errorMessage = `${name} can't be divided by ${validationRules[name].viki} without remainder`;
-        setIsSaveBtnDisabled(true);
-        return;
-      } else {
-        validationRules[name].error = false;
-        validationRules[name].errorMessage = ``;
-        setIsSaveBtnDisabled(false);
-      }
-    }
-  }
 
   const createInputField = (col, fieldKey, fieldType) => {
     const isRequired = col.validation.required;
