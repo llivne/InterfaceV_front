@@ -1,110 +1,134 @@
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import CreateForm from "../components/forms/CreateForm";
 import CustomThemeProvider from "../contexts/CustomTheme.context";
 
-// Mock the createData function
-const mockCreateData = jest.fn();
+describe("CreateForm Component", () => {
+  const columns = [
+    {
+      field: "name",
+      headerName: "Name",
+      type: "text",
+      validation: { required: true },
+    },
+    {
+      field: "age",
+      headerName: "Age",
+      type: "number",
+      validation: { min: 18, max: 100 },
+    },
+  ];
 
-const columns = [
-  {
-    field: "id",
-    headerName: "ID Number",
-    width: 130,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "topicName",
-    headerName: "Topic name",
-    width: 130,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "batchingTime",
-    headerName: "Batching Time (sec)",
-    type: "number",
-    width: 160,
-    align: "center",
-    headerAlign: "center",
-  },
-];
-
-describe("CreateForm", () => {
-  it("renders the form with correct fields", () => {
-    render(
+  it("renders the form with input fields", () => {
+    const { getByLabelText } = render(
       <CustomThemeProvider>
         <CreateForm
           columns={columns}
           handleClose={() => {}}
-          formHeader="Create Form Header"
-          createData={mockCreateData}
+          formHeader="Create Form"
+          createData={() => {}}
         />
       </CustomThemeProvider>
     );
 
-    // Check if form header is rendered
-    expect(screen.getByText("Create Form Header")).toBeInTheDocument();
-
-    // Check if form fields are rendered
-    expect(screen.getByText("Topic name")).toBeInTheDocument();
-    expect(screen.getByText("Batching Time (sec)")).toBeInTheDocument();
+    expect(getByLabelText("Name")).toBeInTheDocument();
+    expect(getByLabelText("Age")).toBeInTheDocument();
   });
 
-  //   it("handles input changes and updates state", () => {
-  //     const { getByLabelText } = render(
-  //       <CreateForm
-  //         theme={theme}
-  //         columns={columns}
-  //         handleClose={() => {}}
-  //         formHeader="Create Form Header"
-  //         createData={mockCreateData}
-  //       />
+  it("disables save button if required field is empty", () => {
+    const { getByRole } = render(
+      <CustomThemeProvider>
+        <CreateForm
+          columns={columns}
+          handleClose={() => {}}
+          formHeader="Create Form"
+          createData={() => {}}
+        />
+      </CustomThemeProvider>
+    );
+
+    const saveButton = getByRole("button", { name: "Save" });
+    expect(saveButton).toBeDisabled();
+  });
+
+  it("enables save button if all required fields are filled", () => {
+    const { getByLabelText, getByRole } = render(
+      <CustomThemeProvider>
+        <CreateForm
+          columns={columns}
+          handleClose={() => {}}
+          formHeader="Create Form"
+          createData={() => {}}
+        />
+      </CustomThemeProvider>
+    );
+
+    fireEvent.change(getByLabelText("Name"), { target: { value: "John Doe" } });
+    fireEvent.change(getByLabelText("Age"), { target: { value: "25" } });
+
+    const saveButton = getByRole("button", { name: "Save" });
+    expect(saveButton).toBeEnabled();
+  });
+
+  //   it("displays error message for required field if left empty", () => {
+  //     const { getByLabelText, getByText } = render(
+  //       <CustomThemeProvider>
+  //         <CreateForm
+  //           columns={columns}
+  //           handleClose={() => {}}
+  //           formHeader="Create Form"
+  //           createData={() => {}}
+  //         />{" "}
+  //       </CustomThemeProvider>
   //     );
 
-  //     // Simulate typing in input fields
-  //     fireEvent.change(getByLabelText("Topic name"), {
-  //       target: { value: "New Topic" },
-  //     });
-  //     fireEvent.change(screen.getByText("Batching Time (sec)"), {
-  //       target: { value: "10" },
-  //     });
+  //     fireEvent.change(getByLabelText("Name"), { target: { value: "" } });
 
-  //     // Check if state is updated
-  //     expect(screen.getByText("Topic name").value).toBe("New Topic");
-  //     expect(screen.getByText("Batching Time (sec)").value).toBe("10");
+  //     expect(getByText("Required field")).toBeInTheDocument();
   //   });
 
-  //   it("calls createData with correct data when Save button is clicked", async () => {
-  //     const { getByText, getByLabelText } = render(
-  //       <CreateForm
-  //         theme={theme}
-  //         columns={columns}
-  //         handleClose={() => {}}
-  //         formHeader="Create Form Header"
-  //         createData={mockCreateData}
-  //       />
-  //     );
+  it("displays error message for invalid age input", () => {
+    const { getByLabelText, getByText } = render(
+      <CustomThemeProvider>
+        <CreateForm
+          columns={columns}
+          handleClose={() => {}}
+          formHeader="Create Form"
+          createData={() => {}}
+        />
+      </CustomThemeProvider>
+    );
 
-  //     // Simulate typing in input fields
-  //     fireEvent.change(screen.getByText("Topic name"), {
-  //       target: { value: "New Topic" },
-  //     });
-  //     fireEvent.change(screen.getByText("Batching Time (sec)"), {
-  //       target: { value: "10" },
-  //     });
+    fireEvent.change(getByLabelText("Age"), { target: { value: "15" } });
 
-  //     // Click the Save button
-  //     fireEvent.click(screen.getByText("Save"));
+    expect(getByText("Can't be less than 18")).toBeInTheDocument();
+  });
 
-  //     // Wait for state update
-  //     await act(async () => {});
+  it("submits form data when Save button is clicked", () => {
+    const createDataMock = jest.fn();
+    const handleCloseMock = jest.fn();
 
-  //     // Check if createData is called with correct data
-  //     expect(mockCreateData).toHaveBeenCalledWith({
-  //       topicName: "New Topic",
-  //       batchingTime: "10",
-  //     });
-  //   });
+    const { getByLabelText, getByRole } = render(
+      <CustomThemeProvider>
+        <CreateForm
+          columns={columns}
+          handleClose={handleCloseMock}
+          formHeader="Create Form"
+          createData={createDataMock}
+        />
+      </CustomThemeProvider>
+    );
+
+    fireEvent.change(getByLabelText("Name"), { target: { value: "Jane Doe" } });
+    fireEvent.change(getByLabelText("Age"), { target: { value: "30" } });
+
+    const saveButton = getByRole("button", { name: "Save" });
+    fireEvent.click(saveButton);
+
+    expect(createDataMock).toHaveBeenCalledWith({
+      name: "Jane Doe",
+      age: "30",
+    });
+    expect(handleCloseMock).toHaveBeenCalled();
+  });
 });

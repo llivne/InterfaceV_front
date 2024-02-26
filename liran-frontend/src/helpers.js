@@ -112,7 +112,7 @@ export function validate(name, value, validationRules, setIsSaveBtnDisabled) {
 
   if (isRequired && value === "") {
     validationRules[name].error = true;
-    validationRules[name].errorMessage = `Required field`;
+    validationRules[name].errorMessage = "Required field";
     setIsSaveBtnDisabled(true);
     return;
   }

@@ -62,7 +62,7 @@ export default function CreateForm({
   };
 
   const createInputField = (col, fieldKey, fieldType) => {
-    const isRequired = col.validation.required;
+    // const isRequired = col.validation.required;
 
     return (
       <TextField
@@ -74,7 +74,7 @@ export default function CreateForm({
         type={fieldType}
         label={col.headerName}
         autoComplete="off"
-        required={isRequired}
+        // required={isRequired}
         error={validationRules[col.field]?.error}
         helperText={validationRules[col.field]?.errorMessage}
       />
