@@ -1,115 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Typography, TextField, Box, Fab } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
+import { CustomThemeContext } from "../../contexts/CustomTheme.context";
 
 export default function UpdateForm({
-  theme,
   columns,
   handleClose,
   formHeader,
   updateData,
   rowEdited,
 }) {
+  const { theme } = React.useContext(CustomThemeContext);
+
   const [updatedItem, setUpdatedItem] = useState(rowEdited.row);
-  const [validationState, setValidationState] = useState();
   const [isSaveBtnDisabled, setIsSaveBtnDisabled] = useState(false);
 
-  useEffect(() => {
-    const initValidation = columns.map((col) => {
-      const validationStateForField = {
-        name: col["field"],
-        isError: false,
-        errorMsg: "",
+  const [validationRules, setValidationRules] = useState(() => {
+    let result = {};
+
+    for (const [fieldName, _] of Object.entries(rowEdited.row)) {
+      const columnValidRules = columns.find(
+        (col) => col.field === fieldName
+      ).validation;
+
+      result = {
+        ...result,
+        [fieldName]: { ...columnValidRules, error: false, errorMessage: "" },
       };
-      return validationStateForField;
-    });
-
-    setValidationState(initValidation);
-  }, []);
-
-  const markAsFailedValidation = (validationObject, errorMsg) => {
-    validationObject.isError = true;
-    validationObject.errorMsg = errorMsg;
-    setValidationState(validationState);
-    setIsSaveBtnDisabled(true);
-    return false;
-  };
-
-  const markAsPassedValidation = (validationObject) => {
-    validationObject.isError = false;
-    validationObject.errorMsg = "";
-    setValidationState(validationState);
-    setIsSaveBtnDisabled(false);
-    return true;
-  };
-
-  const validate = (event) => {
-    const validationObject = validationState.find((validationItem) => {
-      return validationItem.name === event.name;
-    });
-
-    // event.type, event.name
-
-    const isRequiredAndEmpty = event.required && event.value.length === 0;
-    const isRequiredNotEmpty = event.required && event.value.length !== 0;
-
-    const isNegativeNumber = event.type === "number" && Number(event.value) < 0;
-    const isPositiveNumber =
-      event.type === "number" && Number(event.value) >= 0;
-
-    const min = Number(event.min);
-    const max = Number(event.max);
-
-    if (isRequiredAndEmpty) {
-      return markAsFailedValidation(
-        validationObject,
-        "This field is mandatory"
-      );
     }
 
-    if (isNegativeNumber) {
-      return markAsFailedValidation(
-        validationObject,
-        "Only positive numbers are allowed"
-      );
-    }
-
-    if (min && Number(event.value) < min) {
-      return markAsFailedValidation(
-        validationObject,
-        `The number can't be less than ${min}`
-      );
-    }
-
-    if (max && Number(event.value) > max) {
-      return markAsFailedValidation(
-        validationObject,
-        `The number can't be bigger than ${max}`
-      );
-    }
-
-    if (isPositiveNumber) {
-      return markAsPassedValidation(validationObject);
-    }
-
-    if (isRequiredNotEmpty) {
-      return markAsPassedValidation(validationObject);
-    }
-
-    return true;
-  };
+    return result;
+  });
 
   const handleChange = (event) => {
     let { name, value } = event.target;
-    console.log(event.target.value);
 
     const updateState = (prevState) => {
       return { ...prevState, [name]: value };
     };
     setUpdatedItem(updateState);
 
-    const isValidated = validate(event.target);
-    if (!isValidated) return;
+    validate(name, value);
   };
 
   const handleSave = (event) => {
@@ -117,6 +48,85 @@ export default function UpdateForm({
     updateData(updatedItem);
 
     handleClose();
+  };
+
+  function validate(name, value) {
+    const isRequired = validationRules[name].required;
+    const hasMin = validationRules[name].min;
+    const hasMax = validationRules[name].max !== null;
+    const hasViki = validationRules[name].viki;
+
+    if (isRequired && value === "") {
+      validationRules[name].error = true;
+      validationRules[name].errorMessage = `Required field`;
+      setIsSaveBtnDisabled(true);
+      return;
+    }
+
+    if (hasMin) {
+      if (+value < validationRules[name].min) {
+        validationRules[name].error = true;
+        validationRules[
+          name
+        ].errorMessage = `Can't be less than ${validationRules[name].min}`;
+        setIsSaveBtnDisabled(true);
+        return;
+      } else {
+        validationRules[name].error = false;
+        validationRules[name].errorMessage = ``;
+        setIsSaveBtnDisabled(false);
+      }
+    }
+
+    if (hasMax) {
+      if (+value > validationRules[name].max) {
+        validationRules[name].error = true;
+        validationRules[
+          name
+        ].errorMessage = `Can't be more than ${validationRules[name].max}`;
+        setIsSaveBtnDisabled(true);
+        return;
+      } else {
+        validationRules[name].error = false;
+        validationRules[name].errorMessage = ``;
+        setIsSaveBtnDisabled(false);
+      }
+    }
+
+    if (hasViki) {
+      if (+value % validationRules[name].viki === 0) {
+        validationRules[name].error = true;
+        validationRules[
+          name
+        ].errorMessage = `${name} can't be divided by ${validationRules[name].viki} without remainder`;
+        setIsSaveBtnDisabled(true);
+        return;
+      } else {
+        validationRules[name].error = false;
+        validationRules[name].errorMessage = ``;
+        setIsSaveBtnDisabled(false);
+      }
+    }
+  }
+
+  const createInputField = (col, fieldKey, fieldType) => {
+    const isRequired = col.validation.required;
+
+    return (
+      <TextField
+        sx={{ minWidth: "500px" }}
+        onChange={handleChange}
+        id={fieldKey}
+        value={updatedItem[fieldKey]}
+        name={fieldKey}
+        type={fieldType}
+        label={col.headerName}
+        autoComplete="off"
+        required={isRequired}
+        error={validationRules[col.field]?.error}
+        helperText={validationRules[col.field]?.errorMessage}
+      />
+    );
   };
 
   return (
@@ -136,7 +146,6 @@ export default function UpdateForm({
         }}
       >
         {updatedItem &&
-          validationState &&
           React.Children.toArray(
             columns.map((col, idx) => {
               if (col.field === "id" || col.field === "actions") {
@@ -144,24 +153,7 @@ export default function UpdateForm({
               } else {
                 const fieldKey = col.field;
                 const fieldType = col?.type === "number" ? "number" : "text";
-       
-                return (
-                  <TextField
-                    error={validationState[idx].isError}
-                    helperText={validationState[idx].errorMsg}
-                    onChange={handleChange}
-                    sx={{ minWidth: "500px" }}
-                    id={fieldKey}
-                    value={updatedItem[fieldKey]}
-                    name={fieldKey}
-                    type={fieldType}
-                    inputProps={col.restrictions}
-                    // custom={restrictions} // Ensure the input is not less than 0
-                    label={col.headerName}
-                    autoComplete="off"
-                    required
-                  />
-                );
+                return createInputField(col, fieldKey, fieldType);
               }
             })
           )}
@@ -177,7 +169,7 @@ export default function UpdateForm({
             <Fab
               onClick={handleSave}
               variant="extended"
-              color="actions"
+              color="mainPalette"
               sx={{ width: "20%", borderRadius: "5px", margin: "10px" }}
               disabled={isSaveBtnDisabled}
             >
@@ -188,7 +180,7 @@ export default function UpdateForm({
             <Fab
               onClick={() => handleClose()}
               variant="extended"
-              color="actions"
+              color="mainPalette"
               sx={{ width: "20%", borderRadius: "5px", margin: "10px" }}
             >
               Cancel
