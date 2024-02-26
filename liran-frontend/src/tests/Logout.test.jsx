@@ -14,7 +14,7 @@ describe("Logout component", () => {
         </AuthProvider>
       </BrowserRouter>
     );
-    
+
     await waitFor(() => {
       // LoadingSpinner should be rendered while useEffect is working
       expect(

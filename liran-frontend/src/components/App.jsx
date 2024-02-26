@@ -12,14 +12,17 @@ import Topics from "./individual_pages/Topics.jsx";
 import Devices from "./individual_pages/Devices.jsx";
 import Manufactors from "./individual_pages/Manufacturers.jsx";
 import Logout from "./individual_pages/Logout.jsx";
+import Home from "./Home.jsx";
+import CustomThemeProvider from "../contexts/CustomTheme.context.js";
 
 import "../styles/App.css";
-import Home from "./Home.jsx";
 
 export default memo(function App() {
   return (
     <AuthProvider>
-      <MainApp />
+      <CustomThemeProvider>
+        <MainApp />
+      </CustomThemeProvider>
     </AuthProvider>
   );
 });

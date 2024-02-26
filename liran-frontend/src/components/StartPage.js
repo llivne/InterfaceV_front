@@ -1,21 +1,11 @@
 import React from "react";
 import { Grid, Paper, Typography, TextField, Box, Fab } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import LoginIcon from "@mui/icons-material/Login";
 
 import { AuthContext } from "../contexts/Auth.context";
+import { CustomThemeContext } from "../contexts/CustomTheme.context";
 import img from "../InterfaceMain.png";
-
-const theme = createTheme({
-  palette: {
-    login: {
-      main: "#58B2EF",
-      light: "#3B3486",
-      dark: "#3B3486",
-      contrastText: "#ffffff",
-    },
-  },
-});
 
 export default function StartPage() {
   const [loginData, setLoginData] = React.useState({
@@ -33,6 +23,7 @@ export default function StartPage() {
   };
 
   const auth = React.useContext(AuthContext);
+  const { theme } = React.useContext(CustomThemeContext);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -117,7 +108,7 @@ export default function StartPage() {
               <Fab
                 onClick={handleClick}
                 variant="extended"
-                color="login"
+                color="mainPalette"
                 sx={{ width: "30%" }}
                 disabled={
                   loginData.user === "" ||

@@ -1,7 +1,8 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import AuthProvider from "../contexts/Auth.context";
 import MainPage from "../components/MainPage";
+import AuthProvider from "../contexts/Auth.context";
+import CustomThemeProvider from "../contexts/CustomTheme.context";
 
 // Mocking the helpers
 jest.mock("../helpers", () => ({
@@ -103,7 +104,6 @@ const createDataGridMock = ({
 
 jest.mock("@mui/x-data-grid", () => ({
   __esModule: true,
-  // ...jest.requireActual("@mui/x-data-grid"), // Use the actual implementation for other exports
   DataGrid: jest.fn(() => createDataGridMock),
 }));
 
@@ -112,7 +112,9 @@ describe("MainPage component", () => {
     render(
       <BrowserRouter>
         <AuthProvider>
-          <MainPage path="example" columns={[]} />
+          <CustomThemeProvider>
+            <MainPage path="example" columns={[]} />
+          </CustomThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     );
@@ -125,7 +127,9 @@ describe("MainPage component", () => {
     render(
       <BrowserRouter>
         <AuthProvider>
-          <MainPage path="example" columns={[]} />
+          <CustomThemeProvider>
+            <MainPage path="example" columns={[]} />
+          </CustomThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     );
@@ -141,7 +145,15 @@ describe("MainPage component", () => {
   });
 
   it("opens create modal on button click", async () => {
-    render(<MainPage path="example" columns={[]} />);
+    render(
+      <BrowserRouter>
+        <AuthProvider>
+          <CustomThemeProvider>
+            <MainPage path="example" columns={[]} />
+          </CustomThemeProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    );
 
     // Await for data to "load" & trigger button click to open create modal
     await waitFor(() => {

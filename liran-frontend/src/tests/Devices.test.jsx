@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "../contexts/Auth.context";
 import Devices from "../components/individual_pages/Devices";
+import CustomThemeProvider from "../contexts/CustomTheme.context";
 
 describe("Deices component", () => {
   it("renders Devices component correctly", async () => {
@@ -11,7 +12,9 @@ describe("Deices component", () => {
     render(
       <BrowserRouter>
         <AuthProvider>
-          <Devices setToolbarText={setToolbarTextMock} />
+          <CustomThemeProvider>
+            <Devices setToolbarText={setToolbarTextMock} />
+          </CustomThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     );
@@ -41,7 +44,9 @@ describe("Deices component", () => {
     render(
       <BrowserRouter>
         <AuthProvider>
-          <Devices setToolbarText={setToolbarTextMock} />
+          <CustomThemeProvider>
+            <Devices setToolbarText={setToolbarTextMock} />
+          </CustomThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     );

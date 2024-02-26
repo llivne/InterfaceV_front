@@ -6,7 +6,6 @@ import UpdateForm from "../forms/UpdateForm";
 
 export default function CustomModal({
   open,
-  theme,
   columns,
   formHeader,
   createData,
@@ -43,7 +42,6 @@ export default function CustomModal({
       >
         {createData ? (
           <CreateForm
-            theme={theme}
             columns={columns}
             handleClose={handleClose}
             formHeader={formHeader}
@@ -51,7 +49,6 @@ export default function CustomModal({
           />
         ) : (
           <UpdateForm
-            theme={theme}
             columns={columns}
             handleClose={handleClose}
             formHeader={formHeader}

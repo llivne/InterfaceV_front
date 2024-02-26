@@ -1,11 +1,10 @@
 import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import CreateForm from "../components/forms/CreateForm";
+import CustomThemeProvider from "../contexts/CustomTheme.context";
 
 // Mock the createData function
 const mockCreateData = jest.fn();
-
-const theme = {}; // You can provide a mock theme if needed
 
 const columns = [
   {
@@ -35,13 +34,14 @@ const columns = [
 describe("CreateForm", () => {
   it("renders the form with correct fields", () => {
     render(
-      <CreateForm
-        theme={theme}
-        columns={columns}
-        handleClose={() => {}}
-        formHeader="Create Form Header"
-        createData={mockCreateData}
-      />
+      <CustomThemeProvider>
+        <CreateForm
+          columns={columns}
+          handleClose={() => {}}
+          formHeader="Create Form Header"
+          createData={mockCreateData}
+        />
+      </CustomThemeProvider>
     );
 
     // Check if form header is rendered

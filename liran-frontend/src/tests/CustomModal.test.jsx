@@ -1,9 +1,9 @@
 import React from "react";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import CustomModal from "../components/helper_components/CustomModal";
+import CustomThemeProvider from "../contexts/CustomTheme.context";
 
 // Mock functions for testing
 const mockSetIsOpen = jest.fn();
@@ -20,17 +20,6 @@ const mockUpdateOpen = {
   isOpen: true,
   setIsOpen: mockSetUpdateIsOpen,
 };
-
-const mockTheme = createTheme({
-  palette: {
-    actions: {
-      main: "#58B2EF",
-      light: "#3B3486",
-      dark: "#3B3486",
-      contrastText: "#ffffff",
-    },
-  },
-});
 
 const mockColumns = [
   // define your mock columns here{
@@ -92,13 +81,14 @@ const mockRowEdited = {
 describe("CustomModal component", () => {
   it("renders CreateForm when createData prop is provided", async () => {
     render(
-      <CustomModal
-        open={mockOpen}
-        theme={mockTheme}
-        columns={mockColumns}
-        formHeader="Create Form"
-        createData={mockCreateData}
-      />
+      <CustomThemeProvider>
+        <CustomModal
+          open={mockOpen}
+          columns={mockColumns}
+          formHeader="Create Form"
+          createData={mockCreateData}
+        />
+      </CustomThemeProvider>
     );
 
     // Check if CreateForm is rendered
@@ -109,14 +99,15 @@ describe("CustomModal component", () => {
 
   it("renders UpdateForm when updateData prop is provided", () => {
     render(
-      <CustomModal
-        open={mockUpdateOpen}
-        theme={mockTheme}
-        columns={mockColumns}
-        formHeader="Update Form"
-        updateData={mockUpdateData}
-        rowEdited={mockRowEdited}
-      />
+      <CustomThemeProvider>
+        <CustomModal
+          open={mockUpdateOpen}
+          columns={mockColumns}
+          formHeader="Update Form"
+          updateData={mockUpdateData}
+          rowEdited={mockRowEdited}
+        />
+      </CustomThemeProvider>
     );
 
     // Check if UpdateForm is rendered
@@ -125,13 +116,14 @@ describe("CustomModal component", () => {
 
   it("calls handleClose when the modal is open", async () => {
     render(
-      <CustomModal
-        open={mockOpen}
-        theme={mockTheme}
-        columns={mockColumns}
-        formHeader="Create Form"
-        createData={mockCreateData}
-      />
+      <CustomThemeProvider>
+        <CustomModal
+          open={mockOpen}
+          columns={mockColumns}
+          formHeader="Create Form"
+          createData={mockCreateData}
+        />
+      </CustomThemeProvider>
     );
 
     let modal;

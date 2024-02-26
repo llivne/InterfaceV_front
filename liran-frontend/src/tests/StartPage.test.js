@@ -4,10 +4,15 @@ import StartPage from "../components/StartPage";
 import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "../contexts/Auth.context";
 import * as helpers from "../helpers";
+import CustomThemeProvider from "../contexts/CustomTheme.context";
 
 describe("StartPage component", () => {
   it("renders the StartPage component correctly", () => {
-    render(<StartPage />);
+    render(
+      <CustomThemeProvider>
+        <StartPage />
+      </CustomThemeProvider>
+    );
     expect(screen.getByText("Interface B")).toBeInTheDocument();
     expect(screen.getByText("Log in")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("User")).toBeInTheDocument();
@@ -18,7 +23,11 @@ describe("StartPage component", () => {
   });
 
   it("displays an error message for empty user field", () => {
-    render(<StartPage />);
+    render(
+      <CustomThemeProvider>
+        <StartPage />
+      </CustomThemeProvider>
+    );
     const userInput = screen.getByPlaceholderText("User");
 
     fireEvent.change(userInput, { target: { value: "" } });
@@ -30,7 +39,11 @@ describe("StartPage component", () => {
   });
 
   it("displays an error message for empty password field", () => {
-    render(<StartPage />);
+    render(
+      <CustomThemeProvider>
+        <StartPage />
+      </CustomThemeProvider>
+    );
     const pswdInput = screen.getByPlaceholderText("Password");
 
     fireEvent.change(pswdInput, { target: { value: "" } });
@@ -42,7 +55,11 @@ describe("StartPage component", () => {
   });
 
   it("handles password input correctly", () => {
-    render(<StartPage />);
+    render(
+      <CustomThemeProvider>
+        <StartPage />
+      </CustomThemeProvider>
+    );
     const passwordInput = screen.getByPlaceholderText("Password");
     fireEvent.change(passwordInput, { target: { value: "password123" } });
     expect(passwordInput.value).toBe("password123");
@@ -57,7 +74,9 @@ describe("StartPage component", () => {
     const component = (
       <BrowserRouter>
         <AuthProvider>
-          <StartPage />
+          <CustomThemeProvider>
+            <StartPage />
+          </CustomThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     );

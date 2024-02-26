@@ -3,12 +3,11 @@ import React from "react";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
+import { CustomThemeContext } from "../../contexts/CustomTheme.context";
 
-export default function ActionButtons({
-  theme,
-  handleEditClick,
-  handleDeleteClick,
-}) {
+export default function ActionButtons({ handleEditClick, handleDeleteClick }) {
+  const { theme } = React.useContext(CustomThemeContext);
+
   return (
     <strong>
       <ThemeProvider theme={theme}>
@@ -16,7 +15,7 @@ export default function ActionButtons({
           onClick={handleDeleteClick}
           variant="contained"
           size="small"
-          color="actions"
+          color="mainPalette"
           style={{ marginLeft: 16 }}
           role="delete"
         >
@@ -28,7 +27,7 @@ export default function ActionButtons({
           onClick={handleEditClick}
           variant="contained"
           size="small"
-          color="actions"
+          color="mainPalette"
           style={{ marginLeft: 16 }}
           role="update"
         >

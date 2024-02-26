@@ -1,8 +1,9 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import AuthProvider from "../contexts/Auth.context";
 import Topics from "../components/individual_pages/Topics";
+import AuthProvider from "../contexts/Auth.context";
+import CustomThemeProvider from "../contexts/CustomTheme.context";
 
 describe("Topics component", () => {
   it("renders Topics component correctly", async () => {
@@ -11,7 +12,9 @@ describe("Topics component", () => {
     render(
       <BrowserRouter>
         <AuthProvider>
-          <Topics setToolbarText={setToolbarTextMock} />
+          <CustomThemeProvider>
+            <Topics setToolbarText={setToolbarTextMock} />
+          </CustomThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     );
@@ -41,7 +44,9 @@ describe("Topics component", () => {
     render(
       <BrowserRouter>
         <AuthProvider>
-          <Topics setToolbarText={setToolbarTextMock} />
+          <CustomThemeProvider>
+            <Topics setToolbarText={setToolbarTextMock} />
+          </CustomThemeProvider>
         </AuthProvider>
       </BrowserRouter>
     );

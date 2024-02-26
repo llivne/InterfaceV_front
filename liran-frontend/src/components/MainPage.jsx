@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -10,19 +10,9 @@ import CustomModal from "./helper_components/CustomModal";
 import ActionButtons from "./helper_components/ActionButtons";
 import LoadingSpinner from "./helper_components/LoadingSpinner";
 import "../styles/App.css";
+import { CustomThemeContext } from "../contexts/CustomTheme.context";
 
 const url = "http://localhost:5000";
-
-const theme = createTheme({
-  palette: {
-    actions: {
-      main: "#58B2EF",
-      light: "#3B3486",
-      dark: "#3B3486",
-      contrastText: "#ffffff",
-    },
-  },
-});
 
 export default function MainPage({ path, columns }) {
   // for spinner id data takes time to come from backend
@@ -35,6 +25,8 @@ export default function MainPage({ path, columns }) {
   // for modal window management
   const [isCreateModalOpen, setisCreateModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+  const { theme } = React.useContext(CustomThemeContext);
 
   // talking to backend
   const getDataFromBackend = async () => {
@@ -99,7 +91,6 @@ export default function MainPage({ path, columns }) {
       renderCell: (params) => {
         return (
           <ActionButtons
-            theme={theme}
             handleEditClick={() => {
               setRowEdited(params);
               setIsUpdateModalOpen(true);
@@ -160,7 +151,7 @@ export default function MainPage({ path, columns }) {
             <ThemeProvider theme={theme}>
               <Button
                 onClick={handleAddClick}
-                color="actions"
+                color="mainPalette"
                 variant="contained"
                 sx={{ margin: "5px 10px" }}
               >
@@ -169,7 +160,7 @@ export default function MainPage({ path, columns }) {
               </Button>
             </ThemeProvider>
             <ThemeProvider theme={theme}>
-              <Button color="actions" variant="contained" disabled>
+              <Button color="mainPalette" variant="contained" disabled>
                 <DeleteIcon />
                 Delete Selected {headerPlural}
               </Button>
@@ -178,14 +169,12 @@ export default function MainPage({ path, columns }) {
 
           <CustomModal
             open={open}
-            theme={theme}
             columns={columns}
             formHeader={`Create New ${headerSingle}`}
             createData={handleCreateData}
           ></CustomModal>
           <CustomModal
             open={updateOpen}
-            theme={theme}
             columns={columns}
             formHeader={`Update ${headerSingle}`}
             updateData={handleUpdateData}
