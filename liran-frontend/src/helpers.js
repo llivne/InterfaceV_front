@@ -103,3 +103,62 @@ export const deleteData = async (url) => {
     throw error;
   }
 };
+
+export function validate(name, value, validationRules, setIsSaveBtnDisabled) {
+  const isRequired = validationRules[name].required;
+  const hasMin = validationRules[name].min;
+  const hasMax = validationRules[name].max !== null;
+  const hasViki = validationRules[name].viki;
+
+  if (isRequired && value === "") {
+    validationRules[name].error = true;
+    validationRules[name].errorMessage = `Required field`;
+    setIsSaveBtnDisabled(true);
+    return;
+  }
+
+  if (hasMin) {
+    if (+value < validationRules[name].min) {
+      validationRules[name].error = true;
+      validationRules[
+        name
+      ].errorMessage = `Can't be less than ${validationRules[name].min}`;
+      setIsSaveBtnDisabled(true);
+      return;
+    } else {
+      validationRules[name].error = false;
+      validationRules[name].errorMessage = ``;
+      setIsSaveBtnDisabled(false);
+    }
+  }
+
+  if (hasMax) {
+    if (+value > validationRules[name].max) {
+      validationRules[name].error = true;
+      validationRules[
+        name
+      ].errorMessage = `Can't be more than ${validationRules[name].max}`;
+      setIsSaveBtnDisabled(true);
+      return;
+    } else {
+      validationRules[name].error = false;
+      validationRules[name].errorMessage = ``;
+      setIsSaveBtnDisabled(false);
+    }
+  }
+
+  if (hasViki) {
+    if (+value % validationRules[name].viki === 0) {
+      validationRules[name].error = true;
+      validationRules[
+        name
+      ].errorMessage = `${name} can't be divided by ${validationRules[name].viki} without remainder`;
+      setIsSaveBtnDisabled(true);
+      return;
+    } else {
+      validationRules[name].error = false;
+      validationRules[name].errorMessage = ``;
+      setIsSaveBtnDisabled(false);
+    }
+  }
+}

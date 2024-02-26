@@ -1,48 +1,84 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Typography, TextField, Box, Fab } from "@mui/material";
-import { FormControl } from "@mui/base/FormControl";
 import { ThemeProvider } from "@mui/material/styles";
+import { CustomThemeContext } from "../../contexts/CustomTheme.context";
+
+import { validate } from "../../helpers";
 
 export default function CreateForm({
-  theme,
   columns,
   handleClose,
   formHeader,
   createData,
 }) {
-  const [error, setError] = useState("");
-  const [newItem, setNewItem] = useState(null);
+  const { theme } = React.useContext(CustomThemeContext);
 
-  useEffect(() => {
-    columns.map((col) => {
+  const [newItem, setNewItem] = useState(() => {
+    let result = {};
+
+    columns.forEach((col) => {
       if (col.field === "id" || col.field === "actions") {
         return;
       } else {
-        setNewItem((prevState) => ({ ...prevState, [col.field]: "" }));
+        result = { ...result, [col.field]: "" };
       }
     });
-  }, []);
+    return result;
+  });
+
+  const [isSaveBtnDisabled, setIsSaveBtnDisabled] = useState(true);
+
+  const [validationRules, setValidationRules] = useState(() => {
+    let result = {};
+
+    for (const [fieldName, _] of Object.entries(newItem)) {
+      const columnValidRules = columns.find(
+        (col) => col.field === fieldName
+      ).validation;
+
+      result = {
+        ...result,
+        [fieldName]: { ...columnValidRules, error: false, errorMessage: "" },
+      };
+    }
+
+    return result;
+  });
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    let { name, value } = event.target;
 
     const updateState = (prevState) => {
       return { ...prevState, [name]: value };
     };
-
-    if (event.target?.type === "number" && value < 0) {
-      setError("You can't enter a negative value");
-      return;
-    }
-    setError("");
-
     setNewItem(updateState);
+    validate(name, value, validationRules, setIsSaveBtnDisabled);
   };
+
   const handleSave = (event) => {
     event.preventDefault();
-    console.log("NEW ITEM", newItem);
     createData(newItem);
     handleClose();
+  };
+
+  const createInputField = (col, fieldKey, fieldType) => {
+    const isRequired = col.validation.required;
+
+    return (
+      <TextField
+        sx={{ minWidth: "500px" }}
+        onChange={handleChange}
+        id={fieldKey}
+        value={newItem[fieldKey]}
+        name={fieldKey}
+        type={fieldType}
+        label={col.headerName}
+        autoComplete="off"
+        required={isRequired}
+        error={validationRules[col.field]?.error}
+        helperText={validationRules[col.field]?.errorMessage}
+      />
+    );
   };
 
   return (
@@ -63,27 +99,13 @@ export default function CreateForm({
       >
         {newItem &&
           React.Children.toArray(
-            columns.map((col) => {
+            columns.map((col, idx) => {
               if (col.field === "id" || col.field === "actions") {
                 return <></>;
               } else {
                 const fieldKey = col.field;
                 const fieldType = col?.type === "number" ? "number" : "text";
-                return (
-                  <TextField
-                    error={!!error && fieldType === "number"}
-                    helperText={error}
-                    onChange={handleChange}
-                    sx={{ minWidth: "500px" }}
-                    id={fieldKey}
-                    value={newItem[fieldKey]}
-                    name={fieldKey}
-                    type={fieldType}
-                    label={col.headerName}
-                    autoComplete="off"
-                    required
-                  />
-                );
+                return createInputField(col, fieldKey, fieldType);
               }
             })
           )}
@@ -99,17 +121,18 @@ export default function CreateForm({
             <Fab
               onClick={handleSave}
               variant="extended"
-              color="actions"
+              color="mainPalette"
               sx={{ width: "20%", borderRadius: "5px", margin: "10px" }}
+              disabled={isSaveBtnDisabled}
             >
               Save
             </Fab>
           </ThemeProvider>
           <ThemeProvider theme={theme}>
             <Fab
-              onClick={handleClose}
+              onClick={() => handleClose()}
               variant="extended"
-              color="actions"
+              color="mainPalette"
               sx={{ width: "20%", borderRadius: "5px", margin: "10px" }}
             >
               Cancel
