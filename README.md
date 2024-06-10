@@ -1,0 +1,2 @@
+- to run ui type `npm start`
+- to run backend type `python -m flask run`
